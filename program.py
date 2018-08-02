@@ -23,7 +23,7 @@ class Program:
                 print('\n')
                 time.sleep(1)
 
-            if self.agents[i].fitness > 18.7:
+            if self.agents[i].fitness > 19.7:
                 print('----- Agent information -----')
                 print('Fitness: ' + str(self.agents[i].fitness))
                 print('Code: ' + str(self.agents[i].code))
@@ -84,7 +84,6 @@ class Program:
             return c1
         else:
             return c2
-
 
     def stop(self):
         time.sleep(10000000)

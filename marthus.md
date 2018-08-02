@@ -1,5 +1,6 @@
 #Things to do
-crossover
+improve input functions and output functions in main.py 
+crossover: generate two childs from two parents. try more than two parents.
 novelty search
 modules
 allow different tasks (other than programming)

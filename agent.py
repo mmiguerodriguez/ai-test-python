@@ -16,32 +16,28 @@ class Agent:
 
     def mutate(self, experiment):
         for _ in range(random.randint(0, 5)):
-            word = np.random.choice(experiment.vars)
+            var = np.random.choice(experiment.vars)
             if len(self.code) == 0:
-                self.code = [word]
+                self.code = [var]
             else:
                 if random.randint(0, 1) == 0:
                     index = random.randint(0, len(self.code) - 1)
                     del self.code[index]
                 else:
                     index = random.randint(0, len(self.code))
-                    self.code.insert(index, word)
+                    self.code.insert(index, var)
 
     def execute(self, inpt):
         inpt += self.code
 
         if 'return' in inpt:
             to_execute = inpt[0:inpt.index('return')]
-            try:
-                exec(' '.join(to_execute))
-            except:
-                return 'error 1'
+            try:    exec(' '.join(to_execute))
+            except: return 'error'
 
             to_return = inpt[(inpt.index('return') + 1):]
             to_return = to_return[:to_return.index(';')] if ';' in to_return else to_return
-            try:
-                return eval(' '.join(to_return))
-            except:
-                return 'error 2'
+            try:    return eval(' '.join(to_return))
+            except: return 'error'
         else:
-            return 'error 3'
+            return 'error'
