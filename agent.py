@@ -8,12 +8,14 @@ class Agent:
         self.fitness = 0
 
     def run(self, experiment):
-        inpt = experiment.generate_input()
-        output = self.execute(inpt)
-        self.fitness = experiment.fitness(output, self.code)
+        for _ in range(experiment.times):
+            inpt = experiment.generate_input()
+            output = self.execute(inpt)
+            self.fitness += experiment.fitness(output, self.code)
+        self.fitness /= experiment.times
 
     def mutate(self, experiment):
-        for _ in range(random.randint(0, 3)):
+        for _ in range(random.randint(0, 5)):
             word = np.random.choice(experiment.vars)
             if len(self.code) == 0:
                 self.code = [word]

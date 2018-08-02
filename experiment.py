@@ -1,10 +1,12 @@
 import copy
+import math
 
 class Experiment:
-    def __init__(self, vars, inpt, output):
+    def __init__(self, vars, inpt, output, times):
         self.vars = vars
         self.inpt = inpt
         self.output = output
+        self.times = times
 
     def generate_input(self):
         inpt = self.inpt()
@@ -12,7 +14,6 @@ class Experiment:
         return inpt
 
     def fitness(self, output, code):
-        print (' '.join(self.last_inpt))
         exec(' '.join(self.last_inpt))
         correct_output = int(eval(self.output))
         if 'error' in str(output):
@@ -23,6 +24,11 @@ class Experiment:
             if '3' in output:
                 fitness = -4
         else:
-            fitness = 1/((correct_output - output) ** 2 + 0.0000000001)
+            fitness = self.fitness_func(correct_output - output)
 
         return fitness - len(code) / 5
+
+    @staticmethod
+    def fitness_func(x):
+        if x < 0: return math.exp(x + 2)
+        else:     return math.exp(-x + 2)
