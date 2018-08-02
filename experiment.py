@@ -25,10 +25,9 @@ class Experiment:
                 fitness = -4
         else:
             fitness = self.fitness_func(correct_output - output)
-
         return fitness - len(code) / 5
 
     @staticmethod
     def fitness_func(x):
-        if x < 0: return math.exp(x + 2)
-        else:     return math.exp(-x + 2)
+        if x < 0: return math.exp(x / 10 + 3)
+        else:     return math.exp(-x / 10 + 3)
