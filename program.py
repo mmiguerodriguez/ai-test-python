@@ -6,9 +6,19 @@ import random
 import itertools
 
 class Program:
-    def __init__(self, agents_amount):
+    def __init__(self, agents_amount, filename = None):
         self.agents_amount = agents_amount
-        self.agents = [Agent([]) for _ in range(self.agents_amount)]
+
+        if filename == None:
+            self.agents = [Agent([]) for _ in range(self.agents_amount)]
+        else:
+            self.agents = []
+
+            file = open('saved_agents/' + filename, 'r')
+            for i, line in enumerate(file):
+                if i < agents_amount:
+                    self.agents.append(Agent(line))
+            file.close()
 
     def run(self, experiment):
         i = 0
@@ -29,6 +39,7 @@ class Program:
                 print('Code: ' + str(self.agents[i].code))
                 print('\n')
                 print('Total iterations = ' + str(j))
+                self.save_agents('last_run')
                 self.stop()
 
             if i == self.agents_amount - 1:
@@ -84,6 +95,12 @@ class Program:
             return c1
         else:
             return c2
+
+    def save_agents(self, filename):
+        file = open('saved_agents/' + filename, 'w')
+        for agent in self.agents:
+            file.write(str(agent.code) + '\n')
+        file.close()
 
     def stop(self):
         time.sleep(10000000)
