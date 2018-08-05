@@ -2,16 +2,16 @@ from experiment import Experiment
 from program import Program
 from numpy.random import randint
 
-amount = 12
+pop_size = 12
 
 # If we want to load agents from a file in 'saved_agents/' we can use the
 # following line
 '''
-main = Program(amount, 'test')
+main = Program(pop_size, 'test')
 '''
 
 # If not, we use the regular one
-main = Program(amount)
+main = Program(pop_size)
 
 experiment = Experiment(
     main,

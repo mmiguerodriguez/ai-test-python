@@ -27,18 +27,11 @@ class Program:
         while True:
             self.agents[i].run(experiment)
             if j % 1000 == 0:
-                print('----- Agent information -----')
-                print('Fitness: ' + str(self.agents[i].fitness))
-                print('Code: ' + str(self.agents[i].code))
-                print('\n')
+                self.print_agent(self.agents[i], j)
                 time.sleep(1)
 
             if self.agents[i].fitness > 19.7:
-                print('----- Agent information -----')
-                print('Fitness: ' + str(self.agents[i].fitness))
-                print('Code: ' + str(self.agents[i].code))
-                print('\n')
-                print('Total iterations = ' + str(j))
+                self.print_agent(self.agents[i], j)
                 self.save_agents('last_run')
                 self.stop()
 
@@ -51,6 +44,13 @@ class Program:
                 i += 1
 
             j += 1
+
+    def print_agent(self, agent, j):
+        print('----- Agent information -----')
+        print('Fitness: ' + str(agent.fitness))
+        print('Code: ' + str(agent.code))
+        print('Iteration: ' + str(j))
+        print('\n')
 
     def cut(self, experiment):
         half = int(self.agents_amount / 2)

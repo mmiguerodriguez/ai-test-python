@@ -1,10 +1,9 @@
 #Things to do
-improve input functions and output functions in main.py 
+improve input functions and output functions in main.py
 crossover: generate two childs from two parents. try more than two parents.
 novelty search
 modules
 allow different tasks (other than programming)
-save / restore
 
 #Finished things
 changed mutations place
