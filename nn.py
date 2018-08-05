@@ -1,21 +1,21 @@
 import itertools
 import numpy as np
 import matplotlib.pyplot as plt
+from utils import sigmoid, sigmoid_prime
+import mnist
 import os
 
 class NN():
     exp_name = 'nn5'
     learning_rate = .03
     regularization = .003
-    batch_size = 128
-    epoch_size = 50
-    test_runnings = 10000
 
     def __init__(self):
         self.sizes = [784, 100, 30, 10]
         self.Ws = [np.random.randn(m, n) for m, n in zip(self.sizes[1:], self.sizes)]
         self.Bs = [np.random.randn(m, 1) for m in self.sizes[1:]]
-        self.restore()
+        #self.restore()
+        self.load_mnist()
 
     def run(self):
         accuracies = []
@@ -33,28 +33,17 @@ class NN():
                     plt.show(block=False)
                     time.sleep(10000)
 
-    def train(self):
-        for _ in range(self.epoch_size):
-            indices = np.random.choice(self.train_images.shape[0], self.batch_size)
-            self.batch_X = [self.train_images[i] for i in indices]
-            self.batch_Y = [self.train_labels[i] for i in indices]
-            self.sgd()
-
-    def sgd(self):
-        batch_dCdWs = []
-        batch_dCdBs = []
+    def sgd(self, batch_X, batch_Y):
+        gradients = []
 
         for X, Y in zip(self.batch_X, self.batch_Y):
             self.Xs = [X]
             self.Y = Y
             self.forward_pass()
-            #self.costs.append(self.compute_cost())
-            dCdWs, dCdBs = self.backward_pass()
-            batch_dCdWs.append(dCdWs)
-            batch_dCdBs.append(dCdBs)
+            self.costs.append(self.compute_cost())
+            gradients.append(self.backward_pass())
 
-        dCdWs = np.average(batch_dCdWs, axis=0) * self.learning_rate
-        dCdBs = np.average(batch_dCdBs, axis=0) * self.learning_rate
+        dCdWs, dCdBs = np.average(gradients, axis=0) * self.learning_rate
         self.Ws = [W - dW for W, dW in zip(self.Ws, dCdWs)]
         self.Bs = [B - dB for B, dB in zip(self.Bs, dCdBs)]
 
@@ -91,8 +80,7 @@ class NN():
         return np.average(accuracy)
 
     def compute_cost(self):
-        errors = self.Y - self.Xs[-1]
-        return sum([error ** 2 for error in errors]) / 2
+        return sum((self.Y - self.Xs[-1]) ** 2) / 2
 
     def save(self):
         path = 'data/{}'.format(self.exp_name)
@@ -103,10 +91,10 @@ class NN():
         npzfile = np.load('data/{}.npz'.format(self.exp_name))
         self.sizes, self.Ws, self.Bs = [item for _, item in npzfile.items()]
 
-def sigmoid(Z):
-    return 1 / (1 + np.exp(-Z))
-
-def sigmoid_prime(Z):
-    return (1 - sigmoid(Z)) * sigmoid(Z)
+    def load_mnist(self):
+        self.train_images = mnist.train_images().reshape(60000, 784, 1)[0:50000]
+        self.train_labels = np.eye(10)[mnist.train_labels()].reshape(60000, 10, 1)[0:50000]
+        self.test_images = mnist.test_images().reshape(10000, 784, 1)
+        self.test_labels = mnist.test_labels().reshape(10000, 1)
 
 NN().run()
