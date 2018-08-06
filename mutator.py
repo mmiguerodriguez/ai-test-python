@@ -26,10 +26,16 @@ class Mutator:
             return weights, self.modify_bias(layer, biases)
 
     def add_neuron(self, layer, weights, biases):
-        weights[layer] = np.concatenate((
-            weights[layer],
-            np.random.randn(1, len(weights[layer][0]))
+        weights[layer - 1] = np.concatenate((
+            weights[layer - 1],
+            np.random.randn(1, len(weights[layer - 1][0]))
         ))
+
+        weights[layer] = np.append(
+            weights[layer],
+            [[np.random.randn()] for _ in range(len(weights[layer]))],
+            axis=1
+        )
 
         biases[layer - 1] = np.concatenate((
             biases[layer - 1],
@@ -40,14 +46,13 @@ class Mutator:
 
     def remove_neuron(self, layer, weights, biases):
         weights[layer - 1] = weights[layer - 1][:-1]
-        weights = np.delete(weights[layer], len(weights[layer]), axis=1)
+        weights[layer] = np.delete(weights[layer], len(weights[layer]) - 1, axis=1)
 
         biases[layer - 1] = biases[layer - 1][:-1]
 
         return weights, biases
 
     def modify_weight(self, layer, weights):
-        print (layer)
         shape = np.shape(weights[layer])
         new_weights = np.random.randn(shape[0], shape[1])
 

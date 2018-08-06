@@ -22,17 +22,17 @@ evolution = Evolution()
 
 for i in itertools.count():
 	agents = [Agent(params['weights'], params['biases'], params['learning_rate'], params['regularization']) for params in all_params]
-	
+
 	for j in range(train_iterations):
 		x, y = task.train_input()
 		costs = [np.average(a.costs) for a in agents]
 		print ('Ite {}: Avg cost: {}. Best cost {}'.format(j, np.average(costs), max(costs)))
 		for agent in agents: agent.train(x, y)
-		
+
 	for _ in range(test_iterations):
 		x, y = task.test_input()
 		for agent in agents: agent.test(x, y)
-	
+
 	fitnesses = [np.average(a.accuracies) for a in agents]
 	print ('Gen {}: Avg fitness: {}. Best fitness {}'.format(i, np.average(fitnesses), max(fitnesses)))
 	data = [[f, p] for f, p in zip(fitnesses, all_params)]

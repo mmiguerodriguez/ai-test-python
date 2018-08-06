@@ -20,7 +20,7 @@ class Evolution:
         for i, params in enumerate(all_params):
             # Choose a random layer
             layers = len(params['weights'])
-            layer = np.random.randint(0, layers)
+            layer = np.random.randint(1, layers)
 
             # Generate new weight or biases and replace the information
             weights, biases = self.mutator.mutate(layer, params['weights'], params['biases'])
