@@ -18,9 +18,9 @@ class Mutator:
 
         if random < 0.25:
             return self.add_neuron(layer, weights, biases)
-        else if random < 0.5:
+        elif random < 0.5:
             return self.remove_neuron(layer, weights, biases)
-        else if random < 0.75:
+        elif random < 0.75:
             return self.modify_weight(layer, weights), biases
         else:
             return weights, self.modify_bias(layer, biases)
@@ -28,7 +28,7 @@ class Mutator:
     def add_neuron(self, layer, weights, biases):
         weights[layer] = np.concatenate((
             weights[layer],
-            np.random.randn(len(weights[layer][0]), 1)
+            np.random.randn(1, len(weights[layer][0]))
         ))
 
         biases[layer - 1] = np.concatenate((
@@ -47,6 +47,7 @@ class Mutator:
         return weights, biases
 
     def modify_weight(self, layer, weights):
+        print (layer)
         shape = np.shape(weights[layer])
         new_weights = np.random.randn(shape[0], shape[1])
 
